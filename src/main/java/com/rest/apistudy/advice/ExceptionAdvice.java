@@ -1,5 +1,6 @@
 package com.rest.apistudy.advice;
 
+import com.rest.apistudy.exception.CEmailSigninFailedException;
 import com.rest.apistudy.exception.CUserNotFoundException;
 import com.rest.apistudy.model.response.CommonResult;
 import com.rest.apistudy.service.ResponseService;
@@ -32,6 +33,14 @@ public class ExceptionAdvice {
         Locale locale = request.getLocale();
         return responseService.getFailResult(Integer.valueOf(getMessage("userNotFound.code", locale)), getMessage("userNotFound.msg", locale));
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected CommonResult emailSigninFailed(HttpServletRequest request, CEmailSigninFailedException e) {
+        Locale locale = request.getLocale();
+        return responseService.getFailResult(Integer.valueOf(getMessage("emailSigninFailed.code",locale)), getMessage("emilSigninFailed.msg",locale));
+    }
+
 
     private String getMessage(String code,Locale locale) {
         return getMessage(code, null, locale);
